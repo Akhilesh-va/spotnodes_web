@@ -14,9 +14,9 @@ const PROJECTS = [
     title: 'ZOOOX',
     type: 'Full Product',
     tech: ['React Native', 'TypeScript', 'GraphQL'],
-    desc: 'Production-grade cashback and analytics platform built with scalable architecture and real-time data systems.',
-    fullDesc: 'ZOOOX is a powerful production-scale cashback and analytics platform. Built leveraging a robust React Native and TypeScript mobile frontend communicating seamlessly with a strongly optimized GraphQL backend. It features innovative Gmail integration for automated receipt parsing and data extraction to provide users with instantaneous real-time spend tracking and analytics.',
-    features: ['React Native mobile architecture', 'GraphQL-powered optimized backend', 'Automated Gmail data extraction', 'Real-time analytics engine'],
+    desc: 'Production-grade cashback and spend analytics that turns purchases into actionable insights.',
+    fullDesc: 'ZOOOX is a production-grade cashback and spend analytics platform designed to simplify how users track and optimize their purchases. It integrates with email systems to extract transaction data and present meaningful insights through interactive dashboards. Built with a scalable architecture, it ensures smooth performance even with large datasets and real-time updates. The platform focuses on automation, helping users save time while maximizing cashback opportunities. From mobile to web, the system is engineered for reliability, performance, and a seamless user experience.',
+    features: ['Email-powered transaction extraction', 'Interactive cashback + spend dashboards', 'Real-time insights with large dataset performance', 'Automation to save time and maximize cashback'],
     image: zoooxImg, 
     color: '#d0bcff', // primary
     links: [
@@ -29,9 +29,9 @@ const PROJECTS = [
     title: 'Book Transpo',
     type: 'Android System',
     tech: ['Android', 'AI', 'Google Maps'],
-    desc: 'A logistics and ride-booking platform with real-time features and AI-powered voice interactions.',
-    fullDesc: 'Book Transpo is an advanced logistics and ride-booking platform engineered to handle complex routing with absolute reliability. It deeply integrates Google Maps for high-frequency geolocation and routing logic. An embedded AI voice-based booking system allows seamless accessibility. The entire backend is highly secured with scalable APIs processing real-time data transport.',
-    features: ['AI voice-based booking system', 'Google Maps geolocation routing', 'Highly scalable secured backend APIs', 'Real-time transport optimization'],
+    desc: 'Real-time logistics and ride booking with live tracking, route optimization, and scalable workflows.',
+    fullDesc: 'Book Transpo is a logistics and ride-booking platform engineered for real-time operations and scalable performance. It includes advanced features like live tracking, route optimization, and seamless booking workflows. The system integrates deeply with mapping services to provide accurate navigation and location intelligence. Designed with both users and transport providers in mind, it ensures smooth communication and efficient operations. Built with a strong backend architecture, it supports real-time data flow and secure transactions.',
+    features: ['Live tracking and route optimization', 'Mapping-service navigation intelligence', 'Seamless, scalable booking workflows', 'Secure real-time backend data flow'],
     image: booktranspoImg,
     color: '#4fd8eb', // cyan
     links: [
@@ -43,9 +43,10 @@ const PROJECTS = [
     title: 'LinkPad',
     type: 'Web Tool',
     tech: ['Web', 'UI/UX', 'Performance'],
-    desc: 'A super fast and minimal link management tool built purely for productivity and quick access.',
-    fullDesc: 'LinkPad strips away unnecessary bloat to offer an incredibly fast and lightweight link management solution. Engineered directly for productivity, it features a hyper-minimalist, clean UI allowing users to effortlessly organize and instantly access their critical URLs without friction.',
-    features: ['Hyper-fast lightweight architecture', 'Clean minimalist UI', 'Instant link organization data flow'],
+    desc: 'Share text instantly through a link, with no login, no storage, and no friction.',
+    fullDesc:
+      'Share text instantly through a link — no login, no storage, no friction. Everything you write is encoded directly into the URL, making it easy to send, access, and use anywhere.',
+    features: ['Instant link-based sharing', 'No login or storage required', 'URL-encoded content for easy sharing'],
     image: linkpadImg,
     color: '#ccc2dc', // secondary
     links: [
@@ -57,9 +58,9 @@ const PROJECTS = [
     title: 'Umrah Chalo',
     type: 'Production Web',
     tech: ['React.js', 'MongoDB', 'WebSockets'],
-    desc: 'A real-world deployed platform strictly designed for usability, performance, and heavy business needs.',
-    fullDesc: 'Umrah Chalo is a robust production-ready platform built to serve actual business environments and heavy user traffic. The codebase strictly prioritizes flawless responsive design scaling seamlessly from mobile to desktop. Every interaction focuses on intuitive user experience and high-speed payload delivery.',
-    features: ['Fully responsive viewport scaling', 'Optimized for high business conversion', 'Production deployment stability'],
+    desc: 'A deployed travel booking platform built for seamless UX, performance, and real user traffic.',
+    fullDesc: 'Umrah Chalo is a real-world deployed travel platform focused on delivering a seamless and user-friendly booking experience. The platform is designed to handle real user traffic while maintaining performance, clarity, and responsiveness across devices. It simplifies the process of exploring and booking Umrah packages with a clean and intuitive interface. Special attention has been given to usability, ensuring users can navigate and take action effortlessly. Built with production readiness in mind, it reflects strong focus on business needs and real-world application.',
+    features: ['Seamless booking UX for real traffic', 'Responsive performance across devices', 'Clean Umrah package discovery + booking flow', 'Production-ready reliability'],
     image: umrahchaloImg,
     color: '#e8b4b8', // warm
     links: [
@@ -269,10 +270,28 @@ const ProjectCard = ({ project, index, onClick }) => {
 
 export const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
+  const scrollYRef = useRef(0);
 
   useEffect(() => {
-    if (selectedProject) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = 'auto';
+    if (selectedProject) {
+      scrollYRef.current = window.scrollY;
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollYRef.current);
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+    };
   }, [selectedProject]);
 
   return (
@@ -451,7 +470,10 @@ export const Projects = () => {
                    />
 
                    {/* Scrollable Center Content */}
-                   <div className="p-8 md:p-14 flex-1 overflow-y-auto custom-scrollbar z-10">
+                   <div 
+                     className="p-8 md:p-14 flex-1 overflow-y-auto custom-scrollbar z-10 overscroll-contain"
+                     onWheel={(e) => e.stopPropagation()}
+                   >
                       <motion.div 
                          initial={{ opacity: 0, y: 20 }}
                          animate={{ opacity: 1, y: 0 }}
