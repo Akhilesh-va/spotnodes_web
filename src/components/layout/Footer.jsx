@@ -1,7 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import spotnodesLogo from '../../assets/spotnodeslogo.png';
+
+const SocialDropdown = ({ title, links, colorClass }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div 
+      className="relative z-50 flex items-center justify-center p-2"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <div className={`cursor-pointer transition-colors flex items-center gap-1 ${isOpen ? colorClass : 'text-surface-variant hover:text-[var(--text-main)]'}`}>
+        {title} <motion.div animate={{ rotate: isOpen ? 45 : 0 }} transition={{ type: "spring", stiffness: 300 }}><ArrowUpRight className="w-3 h-3" /></motion.div>
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95, filter: 'blur(5px)' }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, y: 10, scale: 0.95, filter: 'blur(5px)' }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 min-w-[140px] bg-surface-lowest/90 backdrop-blur-3xl border border-[var(--glass-border)] rounded-2xl p-2 shadow-[0_10px_40px_rgba(0,0,0,0.3)] flex flex-col gap-1 overflow-hidden pointer-events-auto"
+          >
+            {links.map((link, i) => (
+              <a
+                key={i}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className={`flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-[var(--glass-border)] transition-colors text-xs font-bold ${colorClass}`}
+              >
+                {link.name}
+                <ArrowUpRight className="w-3 h-3 opacity-50" />
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 export const Footer = () => {
   return (
@@ -21,16 +62,31 @@ export const Footer = () => {
           <span className="text-[var(--text-main)] transition-colors duration-500 font-manrope font-bold text-xl group-hover:text-primary">Spotnodes Lab</span>
         </div>
 
-        <div className="text-surface-variant text-sm flex gap-6">
-          <a href="#" className="hover:text-primary transition-colors flex items-center gap-1">
-            GitHub <ArrowUpRight className="w-3 h-3" />
-          </a>
-          <a href="#" className="hover:text-secondary transition-colors flex items-center gap-1">
-            LinkedIn <ArrowUpRight className="w-3 h-3" />
-          </a>
-          <a href="#" className="hover:text-white transition-colors flex items-center gap-1">
-            Twitter <ArrowUpRight className="w-3 h-3" />
-          </a>
+        <div className="text-surface-variant text-sm flex gap-4 md:gap-6 items-center relative z-40">
+          <SocialDropdown 
+             title="GitHub" 
+             colorClass="text-primary"
+             links={[
+               { name: 'Hadi', url: 'https://github.com/mohdhadi01' },
+               { name: 'Akhilesh', url: 'https://github.com/Akhilesh-va' }
+             ]} 
+          />
+          <SocialDropdown 
+             title="LinkedIn" 
+             colorClass="text-secondary"
+             links={[
+               { name: 'Hadi', url: 'https://www.linkedin.com/in/mohd-hadi-5a4638226/' },
+               { name: 'Akhilesh', url: 'https://www.linkedin.com/in/akhilesh2002/' }
+             ]} 
+          />
+          <SocialDropdown 
+             title="Instagram" 
+             colorClass="text-[#e8b4b8]"
+             links={[
+               { name: 'Hadi', url: 'https://www.instagram.com/mysterbyte/' },
+               { name: 'Akhilesh', url: 'https://www.instagram.com/engg.vlogs/' }
+             ]} 
+          />
         </div>
 
         <div className="text-surface-variant text-sm">

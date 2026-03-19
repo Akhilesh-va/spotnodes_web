@@ -56,16 +56,26 @@ export const Contact = () => {
     setStatus('loading');
 
     try {
+      const scriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL;
+      if (!scriptUrl) {
+        throw new Error('Missing VITE_GOOGLE_APPS_SCRIPT_URL. Add it to your .env and restart the dev server.');
+      }
+
       const payload = new URLSearchParams();
       payload.append("name", formData.name);
       payload.append("email", formData.email);
       payload.append("message", formData.message);
 
-      await fetch('https://script.google.com/macros/s/AKfycbyC1g6wOcim9oIKYhax2EDMdG-PpnF88jN-fux9oTQSs8K4ETMfQOROu7oDbx_QsJE/exec', {
+      const res = await fetch(scriptUrl, {
         method: 'POST',
+        // Google Apps Script Web Apps don't reliably support CORS for fetch().
+        // Use fire-and-forget submission; validate success via the Sheet.
         mode: 'no-cors',
         body: payload,
       });
+
+      // With no-cors the response is opaque; if fetch didn't throw, we assume submission reached the endpoint.
+      void res;
 
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
@@ -78,7 +88,7 @@ export const Contact = () => {
     } catch (error) {
       console.error('Submission Error:', error);
       setStatus('error');
-      setErrorMsg('Failed to send. Try again.');
+      setErrorMsg(error?.message || 'Failed to send. Try again.');
     }
   };
 
@@ -167,13 +177,14 @@ export const Contact = () => {
           </AnimatePresence>
 
           <div className="flex justify-center w-full relative">
-            <motion.button 
-               whileTap={status !== 'loading' ? { scale: 0.95 } : {}}
-               disabled={status === 'loading'}
-               type="submit"
-               className="w-full relative group"
+            <motion.div
+              whileTap={status !== 'loading' ? { scale: 0.95 } : {}}
+              className="w-full relative group"
             >
-               <MagneticButton className="w-full md:w-auto px-12 py-5 text-lg group bg-secondary text-on-secondary rounded-xl font-bold tracking-wide shadow-lg border-0 transition-all duration-500 overflow-hidden min-w-[200px]"
+               <MagneticButton
+                 type="submit"
+                 disabled={status === 'loading'}
+                 className="w-full md:w-auto px-12 py-5 text-lg group bg-secondary text-on-secondary rounded-xl font-bold tracking-wide shadow-lg border-0 transition-all duration-500 overflow-hidden min-w-[200px] disabled:opacity-60 disabled:cursor-not-allowed"
                  style={{
                    backgroundColor: status === 'success' ? '#22c55e' : '',
                    boxShadow: status === 'success' ? '0 0 30px rgba(34,197,94,0.4)' : ''
@@ -208,7 +219,7 @@ export const Contact = () => {
                    )}
                  </div>
                </MagneticButton>
-            </motion.button>
+            </motion.div>
           </div>
         </motion.form>
       </div>

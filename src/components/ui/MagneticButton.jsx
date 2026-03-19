@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-export const MagneticButton = ({ children, className = '', onClick }) => {
+export const MagneticButton = ({ children, className = '', onClick, ...buttonProps }) => {
   const buttonRef = useRef(null);
 
   useEffect(() => {
@@ -40,6 +40,7 @@ export const MagneticButton = ({ children, className = '', onClick }) => {
       ref={buttonRef}
       className={`relative inline-flex items-center justify-center p-4 rounded-xl bg-gradient-to-br from-primary to-primary-container text-surface-lowest font-manrope font-bold overflow-hidden group ${className}`}
       onClick={onClick}
+      {...buttonProps}
     >
       <div className="absolute inset-0 bg-[#ffffff]/20 translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0" />
       <span className="relative z-10">{children}</span>
