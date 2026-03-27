@@ -5,7 +5,7 @@ import { MagneticButton } from '../ui/MagneticButton';
 
 import zoooxImg from '../../assets/zooox.png';
 import booktranspoImg from '../../assets/booktranspo.png';
-import linkpadImg from '../../assets/Linkpad.png';
+import buckmintDexImg from '../../assets/buckmintDex.png';
 import umrahchaloImg from '../../assets/umrahchalo.png';
 
 const PROJECTS = [
@@ -39,18 +39,24 @@ const PROJECTS = [
     ]
   },
   {
-    id: 'linkpad',
-    title: 'LinkPad',
-    type: 'Web Tool',
-    tech: ['Web', 'UI/UX', 'Performance'],
-    desc: 'Share text instantly through a link, with no login, no storage, and no friction.',
+    id: 'buckmintdex',
+    title: 'Buckmint DEX',
+    type: 'Web3 Platform',
+    tech: ['React.js', 'TypeScript', 'Redux', 'Styled Components'],
+    desc: 'Modern Web3 decentralized exchange with wallet connection, trading, portfolio tracking, and real-time charts.',
     fullDesc:
-      'Share text instantly through a link — no login, no storage, no friction. Everything you write is encoded directly into the URL, making it easy to send, access, and use anywhere.',
-    features: ['Instant link-based sharing', 'No login or storage required', 'URL-encoded content for easy sharing'],
-    image: linkpadImg,
-    color: '#ccc2dc', // secondary
+      'Built a modern Web3 decentralized exchange interface enabling seamless wallet connection, trading, portfolio tracking, and transaction history. Developed using React, TypeScript, and Redux with Styled Components, the platform features responsive design, dark mode support, and dynamic token-aware charts, delivering an intuitive and performant user experience tailored for real-time crypto trading.',
+    features: [
+      'Seamless Web3 wallet connection and authentication',
+      'Real-time token trading with dynamic, token-aware charts',
+      'Portfolio tracking with live balance and P&L insights',
+      'Full transaction history with filtering and export',
+      'Dark mode support and fully responsive design'
+    ],
+    image: buckmintDexImg,
+    color: '#4fd8eb', // cyan-blue for Web3 aesthetic
     links: [
-      { text: 'Live Tool', url: 'https://akhilesh-va.github.io/LinkPad/' }
+      { text: 'View Project', url: 'https://exchange.buckmint.org/' }
     ]
   },
   {
